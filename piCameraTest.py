@@ -3,7 +3,9 @@
 # adapted from: http://www.raspberrypi.org/picamera-pure-python-interface-for-camera-module/
 
 import picamera
-from time import sleep
+#from time import sleep
+import cv2.cv as cv
+import time
 
 camera = picamera.PiCamera()
 camera.start_preview()
