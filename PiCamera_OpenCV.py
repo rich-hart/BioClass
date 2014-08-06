@@ -24,7 +24,8 @@ cv.NamedWindow("camera", 1)
 
 while True:
     #img = cv.QueryFrame(capture)
-    cv.ShowImage("camera", image)
+    
+    cv.ShowImage("camera", cv.fromarray(image))
     if cv.WaitKey(10) == 27:
         break
 cv.DestroyAllWindows()
