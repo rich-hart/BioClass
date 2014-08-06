@@ -1,7 +1,7 @@
 import io
 import picamera
 import cv2
-
+import numpy as np
 #saving the picture to an in-program stream rather than a file
 stream = io.BytesIO()
 
