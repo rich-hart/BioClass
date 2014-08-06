@@ -19,6 +19,7 @@ with picamera.PiCamera() as camera:
 
     while True:
         #img = cv.QueryFrame(capture)
+        stream=cv.fromarray(stream)
         cv.ShowImage("camera", stream)
         if cv.WaitKey(10) == 27: #'Esc' Key 
             break
