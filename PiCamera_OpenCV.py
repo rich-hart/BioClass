@@ -16,7 +16,7 @@ data = np.fromstring(stream.getvalue(), dtype=np.uint8)
 image = cv2.imdecode(data, 1)
 # OpenCV returns an array with data in BGR order. If you want RGB instead
 # use the following...
-image = image[:, :, ::-1]
+#image = image[:, :, ::-1]
 
 cv.NamedWindow("camera", 1)
 
