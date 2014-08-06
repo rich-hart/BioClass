@@ -1,32 +1,37 @@
 import io
-import time
 import picamera
 import cv2
-import numpy as np
-import cv2.cv as cv
 
-    #camera.start_preview()
-    #time.sleep(2)
-    
-
-# OpenCV returns an array with data in BGR order. If you want RGB instead
-# use the following...
-#image = image[:, :, ::-1]
-
-cv.NamedWindow("camera", 1)
-
-#capture = cv.CaptureFromCAM(0)
+#saving the picture to an in-program stream rather than a file
 stream = io.BytesIO()
-with picamera.PiCamera() as camera:
-    while True:
-        camera.capture(stream, format='jpeg')
-        #img = cv.QueryFrame(capture)
-        # Construct a numpy array from the stream
-        data = np.fromstring(stream.getvalue(), dtype=np.uint8)
-        # "Decode" the image from the array, preserving colour
-        image = cv2.imdecode(data, 1)
-        cv.ShowImage("camera", cv.fromarray(image))
-        if cv.WaitKey(10) == 27:
-            break
-cv.DestroyAllWindows()
 
+#to speed things up, lower the resolution of the camera
+CAMERA_WIDTH = 320
+CAMERA_HEIGHT = 240
+
+with picamera.PiCamera() as camera:
+    camera.resolution = (CAMERA_WIDTH, CAMERA_HEIGHT)
+    #capture into stream
+    camera.capture(stream, format='jpeg')
+#convert image into numpy array
+data = np.fromstring(stream.getvalue(), dtype=np.uint8)
+#turn the array into a cv2 image
+image = cv2.imdecode(data, 1)
+
+#load a cascade file for detecting faces
+face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
+
+#convert to grayscale, which is easier
+gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+
+#look for faces over the given image using the loaded cascade file
+faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+for (x,y,w,h) in faces:
+    #opencv has built in image manipulation functions
+    cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),2)
+
+#use opencv built in window to show the image
+# leave out if your Raspberry Pi isn't set up to display windows
+cv2.imshow('image',image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
