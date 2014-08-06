@@ -3,7 +3,7 @@ import time
 import picamera
 import cv2
 import numpy as np
-
+import cv2.cv as cv
 # Create the in-memory stream
 stream = io.BytesIO()
 with picamera.PiCamera() as camera:
