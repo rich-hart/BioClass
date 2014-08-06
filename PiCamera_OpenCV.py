@@ -19,7 +19,7 @@ data = np.fromstring(stream.getvalue(), dtype=np.uint8)
 image = cv2.imdecode(data, 1)
 
 #load a cascade file for detecting faces
-face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
+face_cascade = cv2.CascadeClassifier('data/lbpcascades/lbpcascade_frontalface.xml')
 
 #convert to grayscale, which is easier
 gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
