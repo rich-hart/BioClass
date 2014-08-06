@@ -1,27 +1,31 @@
+import io
 import time
 import picamera
-import picamera.array
+import cv2
+import numpy as np
 
-import cv2.cv as cv
-
-
-
+# Create the in-memory stream
+stream = io.BytesIO()
 with picamera.PiCamera() as camera:
-    with picamera.array.PiRGBArray(camera) as stream:
-        camera.resolution = (1024, 768)
-        #camera.start_preview()
-        
-        #time.sleep(2)
-        #camera.capture(stream, 'rgb')
-        cv.NamedWindow("camera", 1)
+    camera.start_preview()
+    time.sleep(2)
+    camera.capture(stream, format='jpeg')
+# Construct a numpy array from the stream
+data = np.fromstring(stream.getvalue(), dtype=np.uint8)
+# "Decode" the image from the array, preserving colour
+image = cv2.imdecode(data, 1)
+# OpenCV returns an array with data in BGR order. If you want RGB instead
+# use the following...
+image = image[:, :, ::-1]
 
-        #capture = cv.CaptureFromCAM(0)
+cv.NamedWindow("camera", 1)
 
-    while True:
-        #img = cv.QueryFrame(capture)
-        stream=cv.fromarray(stream)
-        cv.ShowImage("camera", stream)
-        if cv.WaitKey(10) == 27: #'Esc' Key 
-            break
-        #cv.DestroyAllWindows()
-        #print(stream.array.shape)
+#capture = cv.CaptureFromCAM(0)
+
+while True:
+    #img = cv.QueryFrame(capture)
+    cv.ShowImage("camera", image)
+    if cv.WaitKey(10) == 27:
+        break
+cv.DestroyAllWindows()
+
