@@ -11,10 +11,10 @@ camera = picamera.PiCamera()
 camera.start_preview()
 
 for i in range(100):
- camera.brightness = i
- sleep(0.1)
+    camera.brightness = i
+    time.sleep(0.1)
 
-sleep(15)
+time.sleep(15)
 
 #camera.capture('image.jpg')
 
